@@ -1,48 +1,43 @@
 <!DOCTYPE html>
-<html lang="th">
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>IPTV Player - Monomax 1</title>
-    
-    <!-- นำเข้าเครื่องเล่น Clappr ที่นิยมใช้ในเว็บ IPTV -->
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/clappr@latest/dist/clappr.min.js"></script>
-    
-    <style>
-        body, html {
-            margin: 0;
-            padding: 0;
-            width: 100%;
-            height: 100%;
-            background-color: #000;
-            overflow: hidden;
-        }
-        #player {
-            width: 100%;
-            height: 100%;
-        }
-    </style>
-</head>
-<body>
+<title>MONOMAX 2</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta content="IE=edge" http-equiv="X-UA-Compatible">
+<script src="//ssl.p.jwpcdn.com/player/v/8.26.0/jwplayer.js"></script>
+<script> jwplayer.key = 'XSuP4qMl+9tK17QNb+4+th2Pm9AWgMO/cYH8CI0HGGr7bdjo';
+</script>
+<div id="player"></div>
+<script>
+    var playerInstance = jwplayer("player");
 
-    <div id="player"></div>
+    playerInstance.setup({
 
-    <script>
-        var player = new Clappr.Player({
-            // ใส่ลิงก์ raw github ของคุณตรงนี้
-            source: "https://raw.githubusercontent.com/darkrode01/channel/refs/heads/main/THMAX01.m3u8",
-            parentId: "#player",
-            width: '100%',
-            height: '100%',
-            autoPlay: true,
-            mimeType: "application/x-mpegURL",
-            actualLiveTime: true,
-            playback: {
-                playInline: true,
-                recycleVideo: true
-            }
-        });
-    </script>
+        playlist: [{
+"image": "https://www.dropbox.com/scl/fi/563mscujyrmynb03qvwtp/wandering-oldman-logo.png?rlkey=a6v56e1rgt96luwlzqe2ofbfi&dl=1",
+"sources": [
+{
+"default": true,
+"type": "hls",
+"file": 'https://raw.githubusercontent.com/darkrode01/channel/refs/heads/main/THMAX01.m3u8',
+"label": "1"
+}
+]
+}],
+logo: { file: "https://dl.dropbox.com/scl/fi/uydidwzleznktuq5btwwe/logo-4.jpg?rlkey=nvqxtzx2vc2dwoc5phvm02y7y&dl=0", position: 'bottom-right' },
+ width: "100%",
+        height: "100%",
+        aspectratio: "16:9",
+        mute: false,
+        autostart: true,
+        cast: {},
+    });
+    if (getLang == "") {
+   lang = 1;
+  }
+  jwplayer().on('play', function(e) {
+    jwplayer().setCurrentAudioTrack(lang);
+  });
+</script>
 
-</body>
-</html>
+
