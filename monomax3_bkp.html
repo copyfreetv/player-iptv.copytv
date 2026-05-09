@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IPTV Player - Monomax 1</title>
+    
+    <!-- นำเข้าเครื่องเล่น Clappr ที่นิยมใช้ในเว็บ IPTV -->
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/clappr@latest/dist/clappr.min.js"></script>
+    
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #000;
+            overflow: hidden;
+        }
+        #player {
+            width: 100%;
+            height: 100%;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="player"></div>
+
+    <script>
+        var player = new Clappr.Player({
+            // ใส่ลิงก์ raw github ของคุณตรงนี้
+            source: "https://raw.githubusercontent.com/darkrode01/channel/refs/heads/main/THMAX03_bkp.m3u8",
+            parentId: "#player",
+            width: '100%',
+            height: '100%',
+            autoPlay: true,
+            mimeType: "application/x-mpegURL",
+            actualLiveTime: true,
+            playback: {
+                playInline: true,
+                recycleVideo: true
+            }
+        });
+    </script>
+
+</body>
+</html>
