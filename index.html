@@ -1,1 +1,152 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My IPTV Player</title>
+    
+    <!-- Video.js CSS -->
+    <link href="https://vjs.zencdn.net/8.10.0/video-js.css" rel="stylesheet" />
+    
+    <style>
+        body {
+            background-color: #1a1a1a;
+            color: white;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+        }
 
+        header {
+            background-color: #333;
+            padding: 15px;
+            text-align: center;
+            font-size: 1.2rem;
+            font-weight: bold;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.5);
+        }
+
+        .container {
+            display: flex;
+            flex: 1;
+            overflow: hidden;
+        }
+
+        /* ส่วนของเครื่องเล่นวิดีโอ */
+        .video-section {
+            flex: 3;
+            background-color: black;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .video-js {
+            width: 100% !important;
+            height: 100% !important;
+        }
+
+        /* ส่วนของรายการช่อง */
+        .playlist-section {
+            flex: 1;
+            background-color: #262626;
+            overflow-y: auto;
+            border-left: 1px solid #444;
+        }
+
+        .channel-item {
+            padding: 15px;
+            border-bottom: 1px solid #333;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .channel-item:hover {
+            background-color: #444;
+        }
+
+        .channel-item.active {
+            background-color: #007bff;
+            font-weight: bold;
+        }
+
+        @media (max-width: 768px) {
+            .container { flex-direction: column; }
+            .playlist-section { height: 300px; flex: none; }
+        }
+    </style>
+</head>
+<body>
+
+<header>My IPTV Web Player</header>
+
+<div class="container">
+    <!-- Player -->
+    <div class="video-section">
+        <video id="my-video" class="video-js vjs-big-play-centered" controls preload="auto" data-setup='{}'>
+            <p class="vjs-no-js">To view this video please enable JavaScript, and consider upgrading to a web browser that supports HTML5 video</p>
+        </video>
+    </div>
+
+    <!-- Sidebar ช่องรายการ -->
+    <div class="playlist-section" id="playlist">
+        <!-- รายชื่อช่องจะถูกเพิ่มด้วย JavaScript -->
+    </div>
+</div>
+
+<!-- Video.js Library -->
+<script src="https://vjs.zencdn.net/8.10.0/video.min.js"></script>
+
+<script>
+    // --- ตั้งค่าช่องรายการของคุณตรงนี้ ---
+    const channels = [
+        {
+            name: "Monomax 1 (Source 1)",
+            url: "https://raw.githubusercontent.com/cattv976/sportthai/refs/heads/main/MONOMAX1.m3u8"
+        },
+        {
+            name: "Monomax 1 (Source 2)",
+            url: "https://raw.githubusercontent.com/copyfreetv/m3u8/refs/heads/main/monomax1.m3u8"
+        },
+        {
+            name: "ช่องตัวอย่าง (Big Buck Bunny)",
+            url: "https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8"
+        }
+    ];
+
+    const player = videojs('my-video');
+    const playlistElement = document.getElementById('playlist');
+
+    // ฟังก์ชันเปลี่ยนช่อง
+    function playChannel(url, element) {
+        // ลบคลาส active ออกจากช่องเดิม
+        document.querySelectorAll('.channel-item').forEach(item => item.classList.remove('active'));
+        // เพิ่มคลาส active ให้ช่องที่เลือก
+        element.classList.add('active');
+
+        player.src({
+            src: url,
+            type: 'application/x-mpegURL'
+        });
+        player.play();
+    }
+
+    // สร้างรายการช่องใน Sidebar
+    channels.forEach((channel, index) => {
+        const div = document.createElement('div');
+        div.className = 'channel-item';
+        div.innerText = channel.name;
+        div.onclick = function() { playChannel(channel.url, this); };
+        playlistElement.appendChild(div);
+
+        // เล่นช่องแรกโดยอัตโนมัติ
+        if(index === 0) {
+            playChannel(channel.url, div);
+        }
+    });
+</script>
+
+</body>
+</html>
