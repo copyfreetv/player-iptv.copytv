@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>SPOTV2</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta content="IE=edge" http-equiv="X-UA-Compatible">
+<script src="//ssl.p.jwpcdn.com/player/v/8.26.0/jwplayer.js"></script>
+<script> jwplayer.key = 'XSuP4qMl+9tK17QNb+4+th2Pm9AWgMO/cYH8CI0HGGr7bdjo';
+</script>
+<div id="player"></div>
+<script>
+    var playerInstance = jwplayer("player");
+
+    playerInstance.setup({
+
+        playlist: [{
+"image": "https://dl.dropboxusercontent.com//scl/fi/bxuir4s9rwq0e7k9ietbp/1778338275301.png?rlkey=euud1x4oh8507sicnk8l78to7&st=azmhyzs1&dl=1",
+"sources": [
+{
+"default": true,
+"type": "hls",
+"file": 'https://you.kr2umozabd.workers.dev/vx-origin/hd-spotv2_720/chunks.m3u8',
+"label": "1"
+}
+]
+}],
+logo: { file: "https://dl.dropboxusercontent.com//scl/fi/bxuir4s9rwq0e7k9ietbp/1778338275301.png?rlkey=euud1x4oh8507sicnk8l78to7&st=azmhyzs1&dl=0", position: 'bottom-right' },
+ width: "100%",
+        height: "100%",
+        aspectratio: "16:9",
+        mute: false,
+        autostart: true,
+        cast: {},
+    });
+    if (getLang == "") {
+   lang = 1;
+  }
+  jwplayer().on('play', function(e) {
+    jwplayer().setCurrentAudioTrack(lang);
+  });
+</script>
