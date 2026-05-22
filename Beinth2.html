@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<title>true sport1</title>
+<title>Bein 2</title>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta content="IE=edge" http-equiv="X-UA-Compatible">
 
@@ -30,19 +30,9 @@ html,body,#player{
 
 var backupSources = [
 {
-    file: "https://you.kr2umozabd.workers.dev/vx-origin/epl-bein2_720/chunks.m3u8",
-    type: "hls",
-    label: "MAIN"
-},
-{
     file: "https://love.copevad982.workers.dev/vx-origin/epl-bein2_720/chunks.m3u8",
     type: "hls",
-    label: "BACKUP 1"
-},
-{
-    file: "https://love.bebin98399.workers.dev/vx-origin/epl-2_720/playlist.m3u8",
-    type: "hls",
-    label: "BACKUP 2"
+    label: "MAIN"
 }
 ];
 
@@ -100,4 +90,8 @@ loadPlayer(currentSource);
 </script>
 
 </body>
-</html>
+</html>  }
+  jwplayer().on('play', function(e) {
+    jwplayer().setCurrentAudioTrack(lang);
+  });
+</script>
