@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>MONOMAX 2</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta content="IE=edge" http-equiv="X-UA-Compatible">
+<script src="//ssl.p.jwpcdn.com/player/v/8.26.0/jwplayer.js"></script>
+<script> jwplayer.key = 'XSuP4qMl+9tK17QNb+4+th2Pm9AWgMO/cYH8CI0HGGr7bdjo';
+</script>
+<div id="player"></div>
+<script>
+    var playerInstance = jwplayer("player");
+
+    playerInstance.setup({
+
+        playlist: [{
+"image": "https://dl.dropboxusercontent.com//scl/fi/bxuir4s9rwq0e7k9ietbp/1778338275301.png?rlkey=euud1x4oh8507sicnk8l78to7&st=azmhyzs1&dl=1",
+"sources": [
+{
+"default": true,
+"type": "hls",
+"file": 'http://moo7-restream2025.ddns.net:9091/aA1sS4dD7fF0gG3hH6jJ9kK2lL5zZ8xX1cC4vV7bB0nN3mM6qQ9wW2eE5rR8tT1yY4uU7iI0oO3pP6aA9sS2dD5fF8gG1hH4jJ7kK0lL3zZ6xX9cC2vV5bB8nN1mM4qQ7wW0eE3rR6tT9yY2uU5iI8oO1pP4aA7sS0dD3fF6gG9hH2jJ5kK8lL1zZ4xX7cC0vV3bB6nN9mM2qQ5wW8eE1rR4tT7yY0uU3iI6oO9pP2aA5sS8dD1fF4gG7hH0jJ3kK6lL9zZ2xX5cC8vV1bB4nN7mM0qQ3wW6eE9rR2tT5yY8uU1iI4oO7pP0aA3sS6dD9fF2gG5hH8jJ1kK4lL7zZ0xX3cC6vV9bB2nN5mM8qQ1wW4eE7rR0tT3yY6uU9iI2oO5pP8aA1sS4dD7fF0gG3hH6jJ9kK2lL5zZ8xX1cC4vV7bB0nN3mM6qQ9wW2eE5rR8tT1yY4uU7iI0oO3pP6aA9sS2dD5fF8gG1hH4jJ7kK0lL3zZ6xX9cC2vV5bB8nN1mM4qQ7wW0eE3rR6tT9yY2uU5iI8oO1pP4aA7sS0dD3fF6gG9hH2jJ5kK8lL1zZ4xX7cC0vV3bB6nN9mM2qQ5wW8eE1rR4tT7yY0uU3iI6oO9pP2aA5sS8dD1fF4gG7hH0jJ3kK6lL9zZ2xX5cC8vV1bB4nN7mM0qQ3wW6eE9rR2tT5yY8uU1iI4oO7pP0aA3sS6dD9fF2gG5hH8jJ1kK4lL7zZ0xX3cC6vV9bB2nN5mM8qQ1wW4eE7/index.m3u8',
+"label": "1"
+}
+]
+}],
+logo: { file: "https://dl.dropboxusercontent.com//scl/fi/bxuir4s9rwq0e7k9ietbp/1778338275301.png?rlkey=euud1x4oh8507sicnk8l78to7&st=azmhyzs1&dl=0", position: 'bottom-right' },
+ width: "100%",
+        height: "100%",
+        aspectratio: "16:9",
+        mute: false,
+        autostart: true,
+        cast: {},
+    });
+    if (getLang == "") {
+   lang = 1;
+  }
+  jwplayer().on('play', function(e) {
+    jwplayer().setCurrentAudioTrack(lang);
+  });
+</script>
