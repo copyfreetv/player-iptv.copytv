@@ -6,9 +6,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>TrueID HLS Player</title>
-
-<script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+<title>TrueID Native Player</title>
 
 <style>
 
@@ -21,9 +19,11 @@ body {
     width: 100%;
     height: 100%;
 
-    background: #000;
+    background: black;
 
     overflow: hidden;
+
+    font-family: Arial;
 
 }
 
@@ -32,7 +32,7 @@ body {
     width: 100%;
     height: 100%;
 
-    background: #000;
+    background: black;
 
 }
 
@@ -49,13 +49,40 @@ body {
 
     background: rgba(0,0,0,0.7);
 
-    padding: 10px;
+    padding: 10px 14px;
 
-    border-radius: 6px;
-
-    font-family: Arial;
+    border-radius: 8px;
 
     font-size: 14px;
+
+}
+
+#reloadBtn {
+
+    position: absolute;
+
+    top: 10px;
+    right: 10px;
+
+    z-index: 9999;
+
+    padding: 10px 16px;
+
+    border: none;
+
+    border-radius: 8px;
+
+    background: #111;
+
+    color: white;
+
+    cursor: pointer;
+
+}
+
+#reloadBtn:hover {
+
+    background: #222;
 
 }
 
@@ -66,8 +93,12 @@ body {
 <body>
 
 <div id="status">
-Loading...
+Loading stream...
 </div>
+
+<button id="reloadBtn">
+Reload
+</button>
 
 <video
     id="video"
@@ -83,6 +114,8 @@ const video = document.getElementById('video');
 
 const statusBox = document.getElementById('status');
 
+const reloadBtn = document.getElementById('reloadBtn');
+
 const streamUrl =
 'https://cdn941.stm.trueid.net/p301aes/d62_multi_tv_high_ott.smil/playlist.m3u8?appid=antv1&type=live&visitor=mobile&drm=aes&uid=wtxlfgnhab&did=NjUxMDg0ZmY2Yw&mpass=zOzVizWWp2mYR__iyaQyeuBOARiJdwOjul_1wVloPGP2-m5TD-q5wOoYz-FO5wBLUBz2y_GoILm79gQlBFmlOCAgBjfNy0tn6GPIAQKAIDn-7Q&sid=1d55ea24ba&rt=1779603354&ds=25200&tk=wexzQ9SgEJk4-DPKLnJmSrWBGi06Nw7j-EVIPQeim_U';
 
@@ -94,158 +127,128 @@ function setStatus(text) {
 
 }
 
-if (Hls.isSupported()) {
+function loadVideo() {
 
-    const hls = new Hls({
-
-        debug: true,
-
-        enableWorker: true,
-
-        lowLatencyMode: false,
-
-        backBufferLength: 90,
-
-        maxBufferLength: 30,
-
-        maxMaxBufferLength: 60,
-
-        liveSyncDurationCount: 3,
-
-        liveMaxLatencyDurationCount: 10,
-
-        fragLoadingTimeOut: 20000,
-
-        manifestLoadingTimeOut: 10000,
-
-        levelLoadingTimeOut: 10000,
-
-        startFragPrefetch: true
-
-    });
-
-    hls.loadSource(streamUrl);
-
-    hls.attachMedia(video);
-
-    hls.on(Hls.Events.MEDIA_ATTACHED, function () {
-
-        setStatus('Media attached');
-
-    });
-
-    hls.on(Hls.Events.MANIFEST_LOADING, function () {
-
-        setStatus('Loading manifest...');
-
-    });
-
-    hls.on(Hls.Events.MANIFEST_PARSED, function () {
-
-        setStatus('Manifest loaded');
-
-        video.play()
-        .then(() => {
-
-            setStatus('Playing');
-
-        })
-        .catch(err => {
-
-            setStatus('Autoplay blocked');
-
-            console.error(err);
-
-        });
-
-    });
-
-    hls.on(Hls.Events.FRAG_PARSING_ERROR, function(event, data) {
-
-        console.log("FRAG PARSING ERROR", data);
-
-        setStatus("FRAG PARSE ERROR");
-
-    });
-
-    hls.on(Hls.Events.BUFFER_APPENDING_ERROR, function(event, data) {
-
-        console.log("BUFFER ERROR", data);
-
-        setStatus("BUFFER ERROR");
-
-    });
-
-    hls.on(Hls.Events.MEDIA_ERROR, function(event, data) {
-
-        console.log("MEDIA ERROR", data);
-
-        setStatus("MEDIA ERROR");
-
-    });
-
-    hls.on(Hls.Events.ERROR, function(event, data) {
-
-        console.log(data);
-
-        setStatus(
-            'ERROR: ' +
-            data.type +
-            ' | ' +
-            data.details
-        );
-
-        if (data.fatal) {
-
-            switch(data.type) {
-
-                case Hls.ErrorTypes.NETWORK_ERROR:
-
-                    setStatus('Fatal network error');
-
-                    hls.startLoad();
-
-                    break;
-
-                case Hls.ErrorTypes.MEDIA_ERROR:
-
-                    setStatus('Recovering media error');
-
-                    hls.recoverMediaError();
-
-                    break;
-
-                default:
-
-                    setStatus('Destroying player');
-
-                    hls.destroy();
-
-                    break;
-
-            }
-
-        }
-
-    });
-
-} else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+    setStatus('Loading stream...');
 
     video.src = streamUrl;
 
-    video.addEventListener('loadedmetadata', function () {
+    video.load();
 
-        video.play();
+}
+
+reloadBtn.addEventListener('click', function () {
+
+    loadVideo();
+
+});
+
+video.addEventListener('loadstart', function () {
+
+    setStatus('Load Start');
+
+});
+
+video.addEventListener('loadedmetadata', function () {
+
+    setStatus('Metadata Loaded');
+
+    video.play()
+    .then(() => {
+
+        setStatus('Playing');
+
+    })
+    .catch((err) => {
+
+        console.log(err);
+
+        setStatus('Autoplay blocked');
 
     });
 
-} else {
+});
 
-    setStatus('HLS not supported');
+video.addEventListener('canplay', function () {
 
-}
+    setStatus('Can Play');
+
+});
+
+video.addEventListener('playing', function () {
+
+    setStatus('Playing Stream');
+
+});
+
+video.addEventListener('waiting', function () {
+
+    setStatus('Buffering...');
+
+});
+
+video.addEventListener('stalled', function () {
+
+    setStatus('Stream Stalled');
+
+});
+
+video.addEventListener('pause', function () {
+
+    setStatus('Paused');
+
+});
+
+video.addEventListener('ended', function () {
+
+    setStatus('Stream Ended');
+
+});
+
+video.addEventListener('error', function () {
+
+    const mediaError = video.error;
+
+    console.log(mediaError);
+
+    if (mediaError) {
+
+        switch(mediaError.code) {
+
+            case mediaError.MEDIA_ERR_ABORTED:
+                setStatus('Playback Aborted');
+                break;
+
+            case mediaError.MEDIA_ERR_NETWORK:
+                setStatus('Network Error');
+                break;
+
+            case mediaError.MEDIA_ERR_DECODE:
+                setStatus('Decode Error');
+                break;
+
+            case mediaError.MEDIA_ERR_SRC_NOT_SUPPORTED:
+                setStatus('Format Not Supported');
+                break;
+
+            default:
+                setStatus('Unknown Error');
+                break;
+
+        }
+
+    } else {
+
+        setStatus('Unknown Video Error');
+
+    }
+
+});
+
+loadVideo();
 
 </script>
 
 </body>
+
 </html>
