@@ -1,88 +1,195 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+
 <meta charset="UTF-8">
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-<title>TrueID Player</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<script src="https://ssl.p.jwpcdn.com/player/v/8.26.0/jwplayer.js"></script>
+<title>TrueID HLS Player</title>
 
-<script>
-jwplayer.key = 'XSuP4qMl+9tK17QNb+4+th2Pm9AWgMO/cYH8CI0HGGr7bdjo';
-</script>
+<script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 
 <style>
-html, body, #player {
-    width: 100%;
-    height: 100%;
+
+html, body {
+
     margin: 0;
     padding: 0;
-    background: #000;
+    width: 100%;
+    height: 100%;
+    background: black;
+    overflow: hidden;
+
 }
+
+#video {
+
+    width: 100%;
+    height: 100%;
+    background: black;
+
+}
+
+#status {
+
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    z-index: 9999;
+
+    color: white;
+    background: rgba(0,0,0,0.7);
+
+    padding: 10px;
+    font-family: Arial;
+    font-size: 14px;
+
+    border-radius: 6px;
+
+}
+
 </style>
+
 </head>
 
 <body>
 
-<div id="player"></div>
+<div id="status">
+Loading stream...
+</div>
+
+<video
+    id="video"
+    controls
+    autoplay
+    playsinline
+></video>
 
 <script>
 
-var backupSources = [
+const video = document.getElementById('video');
+const statusBox = document.getElementById('status');
 
-{
-    file: "https://cdn941.stm.trueid.net/p301aes/d62_multi_tv_high_ott.smil/playlist.m3u8?appid=antv1&type=live&visitor=mobile&drm=aes&uid=wtxlfgnhab&did=NjUxMDg0ZmY2Yw&mpass=zOzVizWWp2mYR__iyaQyeuBOARiJdwOjul_1wVloPGP2-m5TD-q5wOoYz-FO5wBLUBz2y_GoILm79gQlBFmlOCAgBjfNy0tn6GPIAQKAIDn-7Q&sid=1d55ea24ba&rt=1779603354&ds=25200&tk=wexzQ9SgEJk4-DPKLnJmSrWBGi06Nw7j-EVIPQeim_U",
-    type: "hls",
-    label: "MAIN"
+const streamUrl =
+'https://cdn941.stm.trueid.net/p301aes/d62_multi_tv_high_ott.smil/playlist.m3u8?appid=antv1&type=live&visitor=mobile&drm=aes&uid=wtxlfgnhab&did=NjUxMDg0ZmY2Yw&mpass=zOzVizWWp2mYR__iyaQyeuBOARiJdwOjul_1wVloPGP2-m5TD-q5wOoYz-FO5wBLUBz2y_GoILm79gQlBFmlOCAgBjfNy0tn6GPIAQKAIDn-7Q&sid=1d55ea24ba&rt=1779603354&ds=25200&tk=wexzQ9SgEJk4-DPKLnJmSrWBGi06Nw7j-EVIPQeim_U';
+
+function setStatus(text) {
+
+    console.log(text);
+    statusBox.innerHTML = text;
+
 }
 
-];
+if (Hls.isSupported()) {
 
-var currentSource = 0;
+    const hls = new Hls({
 
-function loadPlayer(index){
+        debug: true,
 
-    jwplayer("player").setup({
+        enableWorker: false,
 
-        playlist: [{
-            image: "https://via.placeholder.com/1280x720.png?text=LIVE",
-            sources: [ backupSources[index] ]
-        }],
+        lowLatencyMode: true,
 
-        width: "100%",
-        height: "100%",
-        aspectratio: "16:9",
-
-        autostart: true,
-        mute: false,
-
-        primary: "html5"
+        backBufferLength: 90
 
     });
 
-    jwplayer("player").on("error", function(){
+    hls.loadSource(streamUrl);
 
-        console.log("Source Error");
+    hls.attachMedia(video);
 
-        currentSource++;
+    hls.on(Hls.Events.MEDIA_ATTACHED, function () {
 
-        if(currentSource < backupSources.length){
+        setStatus('Media attached');
 
-            console.log("Switching Source");
+    });
 
-            loadPlayer(currentSource);
+    hls.on(Hls.Events.MANIFEST_LOADING, function () {
 
-        } else {
+        setStatus('Loading manifest...');
 
-            console.log("All sources failed");
+    });
+
+    hls.on(Hls.Events.MANIFEST_PARSED, function () {
+
+        setStatus('Manifest loaded');
+
+        video.play()
+        .then(() => {
+
+            setStatus('Playing');
+
+        })
+        .catch(err => {
+
+            setStatus('Autoplay blocked');
+
+            console.error(err);
+
+        });
+
+    });
+
+    hls.on(Hls.Events.ERROR, function (event, data) {
+
+        console.log(data);
+
+        setStatus(
+            'ERROR: ' +
+            data.type +
+            ' | ' +
+            data.details
+        );
+
+        if (data.fatal) {
+
+            switch(data.type) {
+
+                case Hls.ErrorTypes.NETWORK_ERROR:
+
+                    setStatus('Fatal network error');
+
+                    hls.startLoad();
+
+                    break;
+
+                case Hls.ErrorTypes.MEDIA_ERROR:
+
+                    setStatus('Fatal media error');
+
+                    hls.recoverMediaError();
+
+                    break;
+
+                default:
+
+                    setStatus('Unrecoverable error');
+
+                    hls.destroy();
+
+                    break;
+
+            }
 
         }
 
     });
 
-}
+} else if (video.canPlayType('application/vnd.apple.mpegurl')) {
 
-loadPlayer(currentSource);
+    video.src = streamUrl;
+
+    video.addEventListener('loadedmetadata', function () {
+
+        video.play();
+
+    });
+
+} else {
+
+    setStatus('HLS not supported');
+
+}
 
 </script>
 
