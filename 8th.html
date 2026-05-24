@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<title>TrueID Player</title>
+
+<script src="https://ssl.p.jwpcdn.com/player/v/8.26.0/jwplayer.js"></script>
+
+<script>
+jwplayer.key = 'XSuP4qMl+9tK17QNb+4+th2Pm9AWgMO/cYH8CI0HGGr7bdjo';
+</script>
+
+<style>
+html, body, #player {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    background: #000;
+}
+</style>
+</head>
+
+<body>
+
+<div id="player"></div>
+
+<script>
+
+var backupSources = [
+
+{
+    file: "https://cdn941.stm.trueid.net/p301aes/d62_multi_tv_high_ott.smil/playlist.m3u8?appid=antv1&type=live&visitor=mobile&drm=aes&uid=wtxlfgnhab&did=NjUxMDg0ZmY2Yw&mpass=zOzVizWWp2mYR__iyaQyeuBOARiJdwOjul_1wVloPGP2-m5TD-q5wOoYz-FO5wBLUBz2y_GoILm79gQlBFmlOCAgBjfNy0tn6GPIAQKAIDn-7Q&sid=1d55ea24ba&rt=1779603354&ds=25200&tk=wexzQ9SgEJk4-DPKLnJmSrWBGi06Nw7j-EVIPQeim_U",
+    type: "hls",
+    label: "MAIN"
+}
+
+];
+
+var currentSource = 0;
+
+function loadPlayer(index){
+
+    jwplayer("player").setup({
+
+        playlist: [{
+            image: "https://via.placeholder.com/1280x720.png?text=LIVE",
+            sources: [ backupSources[index] ]
+        }],
+
+        width: "100%",
+        height: "100%",
+        aspectratio: "16:9",
+
+        autostart: true,
+        mute: false,
+
+        primary: "html5"
+
+    });
+
+    jwplayer("player").on("error", function(){
+
+        console.log("Source Error");
+
+        currentSource++;
+
+        if(currentSource < backupSources.length){
+
+            console.log("Switching Source");
+
+            loadPlayer(currentSource);
+
+        } else {
+
+            console.log("All sources failed");
+
+        }
+
+    });
+
+}
+
+loadPlayer(currentSource);
+
+</script>
+
+</body>
+</html>
