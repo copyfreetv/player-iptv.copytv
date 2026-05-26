@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>Bein 1</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta content="IE=edge" http-equiv="X-UA-Compatible">
+
+<script src="//ssl.p.jwpcdn.com/player/v/8.26.0/jwplayer.js"></script>
+
+<script>
+jwplayer.key = 'XSuP4qMl+9tK17QNb+4+th2Pm9AWgMO/cYH8CI0HGGr7bdjo';
+</script>
+
+<style>
+html,body,#player{
+    width:100%;
+    height:100%;
+    margin:0;
+    padding:0;
+    background:#000;
+}
+</style>
+</head>
+
+<body>
+
+<div id="player"></div>
+
+<script>
+
+var backupSources = [
+{
+    file: "https://love.copevad982.workers.dev/vx-origin/epl-bein1_720/chunks.m3u8",
+    type: "hls",
+    label: "MAIN"
+}
+];
+
+var currentSource = 0;
+
+function loadPlayer(index){
+
+    jwplayer("player").setup({
+
+        playlist: [{
+            image: "https://dl.dropboxusercontent.com/scl/fi/bxuir4s9rwq0e7k9ietbp/1778338275301.png?rlkey=euud1x4oh8507sicnk8l78to7&st=azmhyzs1&dl=1",
+
+            sources: [ backupSources[index] ]
+
+        }],
+
+        logo: {
+            file: "https://dl.dropboxusercontent.com/scl/fi/bxuir4s9rwq0e7k9ietbp/1778338275301.png?rlkey=euud1x4oh8507sicnk8l78to7&st=azmhyzs1&dl=0",
+            position: "bottom-right"
+        },
+
+        width: "100%",
+        height: "100%",
+        aspectratio: "16:9",
+        autostart: true,
+        mute: false,
+        cast: {}
+
+    });
+
+    jwplayer("player").on("error", function(){
+
+        console.log("Source Error");
+
+        currentSource++;
+
+        if(currentSource < backupSources.length){
+
+            console.log("Switching to backup: " + currentSource);
+
+            loadPlayer(currentSource);
+
+        }else{
+
+            console.log("All sources failed");
+
+        }
+
+    });
+
+}
+
+loadPlayer(currentSource);
+
+</script>
+
+</body>
+</html>  }
+  jwplayer().on('play', function(e) {
+    jwplayer().setCurrentAudioTrack(lang);
+  });
+</script>
