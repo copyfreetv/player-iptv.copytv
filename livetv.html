@@ -723,9 +723,16 @@
             if (activeEngine === 'internal') {
                 if (item.format === 'hls' || item.url.includes('.m3u8')) {
                     if (Hls.isSupported()) {
-                        hlsPlayerInstance = new Hls({ liveSyncDurationCount: 3 });
-                        hlsPlayerInstance.loadSource(item.url);
-                        hlsPlayerInstance.attachMedia(video);
+                        hlsPlayerInstance = new Hls({
+    liveSyncDurationCount: 3
+});
+
+hlsPlayerInstance.on(Hls.Events.ERROR, function (event, data) {
+    console.log("HLS ERROR", data);
+});
+
+hlsPlayerInstance.loadSource(item.url);
+hlsPlayerInstance.attachMedia(video);
                     } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
                         video.src = item.url;
                     }
