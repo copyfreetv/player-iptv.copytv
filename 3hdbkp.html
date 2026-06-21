@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>3 HD</title>
+
+<style>
+html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    background: black;
+    overflow: hidden;
+}
+
+.video-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+}
+
+.video-container iframe {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 177.78vh;
+    height: 100vh;
+    transform: translate(-50%, -50%);
+    border: 0;
+}
+
+@media (max-aspect-ratio: 16/9) {
+    .video-container iframe {
+        width: 100vw;
+        height: 56.25vw;
+    }
+}
+</style>
+</head>
+
+<body>
+<div class="video-container">
+    <iframe
+        src="https://embed-xlb.eatmorebanana.org/player_basic.php?channel=hd-ch3bkp&api_key=MIcWPyCpm6maZGJQ"
+        allowfullscreen
+        allow="autoplay">
+    </iframe>
+</div>
+</body>
+</html>
